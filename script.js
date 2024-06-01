@@ -1,3 +1,4 @@
+
 // Initialize the map and set its view to Port Dickson, Negeri Sembilan coordinates and zoom level
 var map = L.map('map').setView([2.4153, 101.8536], 14);
 
@@ -5,8 +6,6 @@ var map = L.map('map').setView([2.4153, 101.8536], 14);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
-
-
 
 // Custom icon class with larger icons
 var CustomIcon = L.Icon.extend({
