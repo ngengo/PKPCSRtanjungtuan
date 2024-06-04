@@ -1,3 +1,4 @@
+
 // Initialize the map and set its view to Port Dickson, Negeri Sembilan coordinates and zoom level
 var map = L.map('map').setView([2.4153, 101.8536], 14);
 
@@ -90,7 +91,7 @@ var iconOnly = [
 { "lat": 2.41166667, "lng": 101.85916667, "icon": "https://i.postimg.cc/vTD12VwX/Mangrove-removebg-preview.png" },
 {  "lat": 2.40361111, "lng": 101.85388889, "icon": "https://i.postimg.cc/vTD12VwX/Mangrove-removebg-preview.png" },
 ];
-
+//test
 // Add markers for landmarks
 landmarks.forEach(function(landmark) {
   var icon = new CustomIcon({ iconUrl: landmark.icon });
