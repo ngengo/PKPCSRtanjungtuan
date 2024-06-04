@@ -6,19 +6,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// Add geolocation control to the map
-L.control.locate({
-  position: 'topright',
-  strings: {
-    title: "Show me where I am"
-  },
-  locateOptions: {
-    enableHighAccuracy: true,
-    maxZoom: 16
-  }
-}).addTo(map);
-
-
 // Custom icon class with larger icons
 var CustomIcon = L.Icon.extend({
   options: {
