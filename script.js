@@ -9,21 +9,23 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Custom icon class with larger icons
+//2026 update shrink icon size to match bound
 var CustomIcon = L.Icon.extend({
   options: {
-    iconSize: [100, 100], // Normal size
-    iconAnchor: [25, 50],
-    popupAnchor: [0, -50],
-    className: 'custom-icon' // Add a custom class
+    iconSize: [44, 44],
+    iconAnchor: [22, 44],
+    popupAnchor: [0, -46],
+    className: 'custom-icon'
   }
 });
 
 // Custom icon class for icons without pop-ups
+//update 2026 shrink size
 var SmallIcon = L.Icon.extend({
   options: {
-    iconSize: [50, 50], // Smaller size
-    iconAnchor: [25, 50],
-    className: 'custom-icon' // Add a custom class
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    className: 'custom-icon'
   }
 });
 
