@@ -112,3 +112,10 @@ iconOnly.forEach(function(marker) {
 
 //bound to map 2026update
 map.fitBounds(bounds, { padding: [32, 32] });
+
+// Collect all points and fit the map to them 2026update
+var allPoints = landmarks.map(function(lm) { return [lm.lat, lm.lng]; })
+  .concat(iconOnly.map(function(m) { return [m.lat, m.lng]; }));
+
+var bounds = L.latLngBounds(allPoints);
+map.fitBounds(bounds, { padding: [32, 32] });
