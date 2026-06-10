@@ -12,13 +12,15 @@
   <!-- LANDING OVERLAY -->
   <div id="landing">
     <div id="landing-content">
-      <p id="landing-sub">Cape Rachado · Port Dickson</p>
+      <p id="landing-sub">Cape Rachado · Port Dickson · Negeri Sembilan</p>
       <h1 id="landing-title">Tanjung Tuan</h1>
+      <p id="landing-tagline">Where history meets the sea</p>
+      <div id="landing-divider"></div>
       <p id="landing-desc">Explore Malaysia's oldest lighthouse, ancient wells, hidden coves, and rich wildlife along the historic Cape Rachado trail.</p>
       <div id="landing-facts">
         <span id="fact-text">Loading fact...</span>
       </div>
-      <button id="landing-btn" onclick="startExploring()">Start Exploring ›</button>
+      <button id="landing-btn" onclick="startExploring()">Explore the Cape</button>
     </div>
   </div>
 
@@ -29,34 +31,25 @@
       <span id="header-sub">Cape Rachado · Port Dickson</span>
     </div>
     <div id="header-right">
-      <button class="header-btn" id="legend-toggle" onclick="toggleLegend()">☰ Legend</button>
+      <button class="header-btn" onclick="toggleLegend()">☰ Legend</button>
     </div>
   </div>
 
   <!-- FILTER TABS -->
   <div id="filter-bar">
-    <button class="filter-btn active" data-category="all" onclick="filterMarkers('all', this)">All</button>
-    <button class="filter-btn" data-category="landmark" onclick="filterMarkers('landmark', this)">🏛 Landmarks</button>
-    <button class="filter-btn" data-category="trail" onclick="filterMarkers('trail', this)">🥾 Trails</button>
-    <button class="filter-btn" data-category="wildlife" onclick="filterMarkers('wildlife', this)">🦜 Wildlife</button>
-    <button class="filter-btn" data-category="water" onclick="filterMarkers('water', this)">🌊 Water</button>
-    <button class="filter-btn" data-category="camp" onclick="filterMarkers('camp', this)">⛺ Camp</button>
+    <button class="filter-btn active" onclick="filterMarkers('all', this)">All</button>
+    <button class="filter-btn" onclick="filterMarkers('landmark', this)">🏛 Landmarks</button>
+    <button class="filter-btn" onclick="filterMarkers('trail', this)">🥾 Trails</button>
+    <button class="filter-btn" onclick="filterMarkers('wildlife', this)">🦜 Wildlife</button>
+    <button class="filter-btn" onclick="filterMarkers('water', this)">🌊 Water</button>
+    <button class="filter-btn" onclick="filterMarkers('camp', this)">⛺ Camp</button>
   </div>
 
   <!-- MAP -->
   <div id="map"></div>
 
-  <!-- SIDEBAR -->
-  <div id="sidebar" class="sidebar-hidden">
-    <button id="sidebar-close" onclick="closeSidebar()">✕</button>
-    <div id="sidebar-img-wrap">
-      <img id="sidebar-img" src="" alt="" />
-    </div>
-    <div id="sidebar-body">
-      <h2 id="sidebar-name"></h2>
-      <p id="sidebar-info"></p>
-    </div>
-  </div>
+  <!-- SIDEBAR (hidden, replaced by popups) -->
+  <div id="sidebar"></div>
 
   <!-- LEGEND PANEL -->
   <div id="legend" class="legend-hidden">
@@ -74,7 +67,7 @@
     <div class="legend-item"><img src="https://i.postimg.cc/gjMJvkwR/Family-removebg-preview.png" class="legend-icon"> Family Friendly</div>
   </div>
 
-  <!-- DID YOU KNOW PANEL -->
+  <!-- DID YOU KNOW -->
   <div id="factbox">
     <span id="factbox-label">Did you know?</span>
     <span id="factbox-text"></span>
