@@ -34,16 +34,16 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // ── DYNAMIC ICON SIZE BASED ON ZOOM ──────────────────────────────────
-var BASE_ZOOM = 15;
 var BASE_SIZE_LG = 44;
 var BASE_SIZE_SM = 28;
+var BASE_ZOOM = null; // set after fitBounds so we know the real starting zoom
 
 function getIconSize(baseSize) {
+  if (BASE_ZOOM === null) return baseSize; // before zoom is known, use base size as-is
   var z = map.getZoom();
-  var scale = Math.pow(1.35, z - BASE_ZOOM);
+  var scale = Math.pow(1.4, z - BASE_ZOOM);
   var s = Math.round(baseSize * scale);
-  s = Math.max(20, Math.min(s, 110));
-  return s;
+  return Math.max(18, Math.min(s, 120));
 }
 
 function makeLandmarkIcon(url) {
@@ -151,6 +151,11 @@ var bounds = L.latLngBounds();
 landmarks.forEach(function(lm) { bounds.extend([lm.lat, lm.lng]); });
 iconOnly.forEach(function(m)  { bounds.extend([m.lat, m.lng]); });
 map.fitBounds(bounds, { padding: [60, 60] });
+
+// After the map finishes fitting, lock in the base zoom so scaling is relative to it
+map.once('moveend', function() {
+  BASE_ZOOM = map.getZoom();
+});
 
 // ── RESCALE ICONS ON ZOOM ────────────────────────────────────────────
 map.on('zoomend', function() {
