@@ -3,16 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Map</title>
+  <title>Tanjung Tuan Interactive Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- LANDING OVERLAY -->
+  <div id="landing">
+    <div id="landing-content">
+      <p id="landing-sub">Cape Rachado · Port Dickson</p>
+      <h1 id="landing-title">Tanjung Tuan</h1>
+      <p id="landing-desc">Explore Malaysia's oldest lighthouse, ancient wells, hidden coves, and rich wildlife along the historic Cape Rachado trail.</p>
+      <div id="landing-facts">
+        <span id="fact-text">Loading fact...</span>
+      </div>
+      <button id="landing-btn" onclick="startExploring()">Start Exploring ›</button>
+    </div>
+  </div>
+
+  <!-- HEADER BAR -->
+  <div id="header">
+    <div id="header-left">
+      <span id="header-title">Tanjung Tuan</span>
+      <span id="header-sub">Cape Rachado · Port Dickson</span>
+    </div>
+    <div id="header-right">
+      <button class="header-btn" id="legend-toggle" onclick="toggleLegend()">☰ Legend</button>
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div id="filter-bar">
+    <button class="filter-btn active" data-category="all" onclick="filterMarkers('all', this)">All</button>
+    <button class="filter-btn" data-category="landmark" onclick="filterMarkers('landmark', this)">🏛 Landmarks</button>
+    <button class="filter-btn" data-category="trail" onclick="filterMarkers('trail', this)">🥾 Trails</button>
+    <button class="filter-btn" data-category="wildlife" onclick="filterMarkers('wildlife', this)">🦜 Wildlife</button>
+    <button class="filter-btn" data-category="water" onclick="filterMarkers('water', this)">🌊 Water</button>
+    <button class="filter-btn" data-category="camp" onclick="filterMarkers('camp', this)">⛺ Camp</button>
+  </div>
+
+  <!-- MAP -->
   <div id="map"></div>
-  <div id="sidebar">
-    <h2 id="landmark-name"></h2>
-    <img id="landmark-image" src="" alt="" style="width:100%;"/>
-    <p id="landmark-info"></p>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar" class="sidebar-hidden">
+    <button id="sidebar-close" onclick="closeSidebar()">✕</button>
+    <div id="sidebar-img-wrap">
+      <img id="sidebar-img" src="" alt="" />
+    </div>
+    <div id="sidebar-body">
+      <h2 id="sidebar-name"></h2>
+      <p id="sidebar-info"></p>
+    </div>
+  </div>
+
+  <!-- LEGEND PANEL -->
+  <div id="legend" class="legend-hidden">
+    <h3 id="legend-title">Map Legend</h3>
+    <div class="legend-item"><img src="https://i.imgur.com/6n7uahL.png" class="legend-icon"> Landmark / Heritage</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/4NZqcQZz/Hiking-removebg-preview.png" class="legend-icon"> Hiking Trail</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/BvTLy3LL/Birds-removebg-preview.png" class="legend-icon"> Wildlife Spotting</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/wTqCRQcS/sea-otter-removebg-preview.png" class="legend-icon"> Marine Life</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/Vsr1LRg4/Wave-removebg-preview.png" class="legend-icon"> Swimming / Beach</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/sXQwFvzf/Camp-removebg-preview.png" class="legend-icon"> Campsite</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/vTD12VwX/Mangrove-removebg-preview.png" class="legend-icon"> Mangrove Area</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/N039CMjw/ship-removebg-preview.png" class="legend-icon"> Vessel / Shipping Lane</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/nh6BgT35/BAtu-removebg-preview.png" class="legend-icon"> Rocky Terrain</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/634VTgyB/m-ONKEY-removebg-preview.png" class="legend-icon"> Monkey Habitat</div>
+    <div class="legend-item"><img src="https://i.postimg.cc/gjMJvkwR/Family-removebg-preview.png" class="legend-icon"> Family Friendly</div>
+  </div>
+
+  <!-- DID YOU KNOW PANEL -->
+  <div id="factbox">
+    <span id="factbox-label">Did you know?</span>
+    <span id="factbox-text"></span>
+    <button id="factbox-next" onclick="nextFact()">›</button>
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
