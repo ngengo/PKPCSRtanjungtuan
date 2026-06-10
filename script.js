@@ -1,7 +1,7 @@
 // ── DID YOU KNOW FACTS ──────────────────────────────────────────────
 var facts = [
   "Rumah Api Tanjung Tuan is the oldest lighthouse in Malaysia, built by the Dutch in 1817.",
-  "Every year, thousands of migratory raptors pass through Tanjung Tuan during the spring migration — making it one of the best birdwatching spots in Southeast Asia.",
+  "Every year, thousands of migratory raptors pass through Tanjung Tuan during the spring migration — one of the best birdwatching spots in Southeast Asia.",
   "The name 'Tanjung Tuan' means 'Cape of the Lord' in Malay, historically linked to Portuguese and Dutch colonial presence.",
   "The footprint of legendary Malay warrior Hang Tuah is said to be imprinted on a stone on the beach here.",
   "Tanjung Tuan is part of the Malaysia Raptor Watch — a conservation event held annually each March.",
@@ -13,33 +13,18 @@ var facts = [
 ];
 
 var currentFact = 0;
-
-function showFact(index) {
-  document.getElementById('factbox-text').textContent = facts[index];
-}
-
-function nextFact() {
-  currentFact = (currentFact + 1) % facts.length;
-  showFact(currentFact);
-}
-
-// Rotate facts every 12 seconds
+function showFact(i) { document.getElementById('factbox-text').textContent = facts[i]; }
+function nextFact() { currentFact = (currentFact + 1) % facts.length; showFact(currentFact); }
 showFact(0);
 setInterval(nextFact, 12000);
-
-// Show a random fact on the landing overlay
 document.getElementById('fact-text').textContent = facts[Math.floor(Math.random() * facts.length)];
 
-
-// ── LANDING OVERLAY ──────────────────────────────────────────────────
+// ── LANDING ──────────────────────────────────────────────────────────
 function startExploring() {
   var landing = document.getElementById('landing');
   landing.classList.add('fade-out');
-  setTimeout(function() {
-    landing.style.display = 'none';
-  }, 800);
+  setTimeout(function() { landing.style.display = 'none'; }, 800);
 }
-
 
 // ── MAP SETUP ────────────────────────────────────────────────────────
 var map = L.map('map', { zoomControl: true });
@@ -48,103 +33,69 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+// ── DYNAMIC ICON SIZE BASED ON ZOOM ──────────────────────────────────
+var BASE_ZOOM = 15;
+var BASE_SIZE_LG = 44;
+var BASE_SIZE_SM = 28;
 
-// ── ICON CLASSES ─────────────────────────────────────────────────────
-var CustomIcon = L.Icon.extend({
-  options: {
-    iconSize: [44, 44],
-    iconAnchor: [22, 44],
-    popupAnchor: [0, -46],
-    className: 'custom-icon'
-  }
-});
+function getIconSize(baseSize) {
+  var z = map.getZoom();
+  var scale = Math.pow(1.35, z - BASE_ZOOM);
+  var s = Math.round(baseSize * scale);
+  s = Math.max(20, Math.min(s, 110));
+  return s;
+}
 
-var SmallIcon = L.Icon.extend({
-  options: {
-    iconSize: [28, 28],
-    iconAnchor: [14, 28],
-    className: 'custom-icon'
-  }
-});
+function makeLandmarkIcon(url) {
+  var s = getIconSize(BASE_SIZE_LG);
+  return L.icon({ iconUrl: url, iconSize: [s, s], iconAnchor: [s/2, s], popupAnchor: [0, -s], className: 'custom-icon' });
+}
 
+function makeSmallIcon(url) {
+  var s = getIconSize(BASE_SIZE_SM);
+  return L.icon({ iconUrl: url, iconSize: [s, s], iconAnchor: [s/2, s], className: 'custom-icon' });
+}
 
 // ── LANDMARKS DATA ───────────────────────────────────────────────────
 var landmarks = [
-  {
-    name: "Bukit Batu Putih",
-    lat: 2.411133, lng: 101.849444,
+  { name: "Bukit Batu Putih", lat: 2.411133, lng: 101.849444, category: "landmark",
     info: "A limestone peak at Cape Rachado with panoramic views of the Malacca Strait. Easily reached via a gentle jungle trail from the lighthouse.",
     img: "https://www.portdickson.info/img/bukit-batu-putih-peak.jpg",
-    icon: "https://i.imgur.com/6n7uahL.png",
-    category: "landmark"
-  },
-  {
-    name: "Rumah Api Tanjung Tuan",
-    lat: 2.407222, lng: 101.851744,
-    info: "The oldest lighthouse in Malaysia, built by the Dutch in 1817. It stands on a rocky promontory overlooking the Malacca Strait and is a popular heritage and birdwatching destination.",
+    icon: "https://i.imgur.com/6n7uahL.png" },
+  { name: "Rumah Api Tanjung Tuan", lat: 2.407222, lng: 101.851744, category: "landmark",
+    info: "The oldest lighthouse in Malaysia, built by the Dutch in 1817. A popular heritage and birdwatching destination overlooking the Malacca Strait.",
     img: "https://images-je.jomexplore.io/wp-content/uploads/2023/12/99ae0ed8.jpg?auto=format&w=1053",
-    icon: "https://i.postimg.cc/ZnvcX2zs/lighthouse.png",
-    category: "landmark"
-  },
-  {
-    name: "Tapak Kaki Hang Tuah",
-    lat: 2.406867, lng: 101.855500,
-    info: "A large stone block on the beach bearing what is widely claimed to be the imprint of legendary Malay warrior Hang Tuah's right foot. A significant piece of local folklore and heritage.",
+    icon: "https://i.postimg.cc/ZnvcX2zs/lighthouse.png" },
+  { name: "Tapak Kaki Hang Tuah", lat: 2.406867, lng: 101.855500, category: "landmark",
+    info: "A large stone block on the beach bearing what is widely claimed to be the imprint of legendary Malay warrior Hang Tuah's right foot.",
     img: "https://dusunraja.wordpress.com/wp-content/uploads/2012/07/tt141.jpg",
-    icon: "https://i.postimg.cc/zfBHvh2T/footprint.png",
-    category: "landmark"
-  },
-  {
-    name: "Perigi Keramat",
-    lat: 2.408056, lng: 101.853889,
-    info: "The Mystical Well — an old well believed by locals to have been used by Hang Tuah. It is considered a sacred site and draws visitors curious about its historical and spiritual significance.",
+    icon: "https://i.postimg.cc/zfBHvh2T/footprint.png" },
+  { name: "Perigi Keramat", lat: 2.408056, lng: 101.853889, category: "landmark",
+    info: "The Mystical Well — believed by locals to have been used by Hang Tuah himself. A sacred site drawing visitors for its historical and spiritual significance.",
     img: "https://assets.bharian.com.my/images/articles/tuah02.transformed.jpg",
-    icon: "https://i.postimg.cc/YChQfX6Z/perigi-kerama.png",
-    category: "landmark"
-  },
-  {
-    name: "Perigi Belanda",
-    lat: 2.406533, lng: 101.855678,
+    icon: "https://i.postimg.cc/YChQfX6Z/perigi-kerama.png" },
+  { name: "Perigi Belanda", lat: 2.406533, lng: 101.855678, category: "landmark",
     info: "A well built during the Dutch colonial era. A quiet reminder of the European presence that shaped this coastline centuries ago.",
     img: "https://3.bp.blogspot.com/-CYAmfbmdZpU/TvcLp2LYQhI/AAAAAAAACBQ/aHQFpyZ_Xcs/s320/IMG_0196.JPG",
-    icon: "https://i.postimg.cc/HnnLDNkC/perigi-belanda.png",
-    category: "landmark"
-  },
-  {
-    name: "Monkey Bay",
-    lat: 2.41307778, lng: 101.85098889,
-    info: "A serene, mostly untouched beach accessible via a steep roped trail through the jungle. A hidden gem away from the crowds — perfect for those who love a short adventure.",
+    icon: "https://i.postimg.cc/HnnLDNkC/perigi-belanda.png" },
+  { name: "Monkey Bay", lat: 2.41307778, lng: 101.85098889, category: "trail",
+    info: "A serene untouched beach accessible via a steep roped jungle trail. A hidden gem away from the crowds — perfect for adventurous explorers.",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtvNy61lOloO9ngJ06WVQAenRWP8BAtbKc1A&s",
-    icon: "https://i.postimg.cc/sXYNh1Xg/6-removebg-preview.png",
-    category: "trail"
-  },
-  {
-    name: "Gua Bawah Rumah Api",
-    lat: 2.40577556, lng: 101.85138889,
-    info: "A cave located beneath the old lighthouse, carved into the limestone hillside. An atmospheric spot that adds to the mystique of Cape Rachado.",
+    icon: "https://i.postimg.cc/sXYNh1Xg/6-removebg-preview.png" },
+  { name: "Gua Bawah Rumah Api", lat: 2.40577556, lng: 101.85138889, category: "trail",
+    info: "A cave carved into the limestone hillside beneath the old lighthouse. An atmospheric spot that adds to the mystique of Cape Rachado.",
     img: "https://images.alltrails.com/eyJidWNrZXQiOiJhc3NldHMuYWxsdHJhaWxzLmNvbSIsImtleSI6InVwbG9hZHMvcGhvdG8vaW1hZ2UvNTgwOTg5NTAvZTU1MGY4NTQxYmU1ZjhhZGY3N2JjMWU1NDk0N2FlZWUuanBnIiwiZWRpdHMiOnsidG9Gb3JtYXQiOiJ3ZWJwIiwicmVzaXplIjp7IndpZHRoIjoyMDQ4LCJoZWlnaHQiOjIwNDgsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsImpwZWciOnsidHJlbGxpc1F1YW50aXNhdGlvbiI6dHJ1ZSwib3ZlcnNob290RGVyaW5naW5nIjp0cnVlLCJvcHRpbWlzZVNjYW5zIjp0cnVlLCJxdWFudGlzYXRpb25UYWJsZSI6M319fQ==",
-    icon: "https://i.postimg.cc/14h0crjx/9-removebg-preview.png",
-    category: "trail"
-  },
-  {
-    name: "Pulau Masjid",
-    lat: 2.40853333, lng: 101.85888889,
-    info: "A peaceful coastal spot away from the crowds of the main Port Dickson beaches. A quiet place to enjoy the sea breeze and watch the ships pass through the Malacca Strait.",
+    icon: "https://i.postimg.cc/14h0crjx/9-removebg-preview.png" },
+  { name: "Pulau Masjid", lat: 2.40853333, lng: 101.85888889, category: "landmark",
+    info: "A peaceful coastal spot away from the crowds. A quiet place to enjoy the sea breeze and watch ships pass through the Malacca Strait.",
     img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjZZfFOntRw5yDtdvoqJgKFVKWI46Qt3tKg12QpwQ0bQWIBrOZlz8Th3VaYS9rfvw6vYYXeqcv9Qfxmdd75ANe6R4xNTTEL1LHxrbYSSVD2MNl8dD_MDjZjVvBiDNom7DiOLLH3EdbOU_w/s1600/pic+3.JPG",
-    icon: "https://i.postimg.cc/63KNSk4T/8-removebg-preview.png",
-    category: "landmark"
-  },
-  {
-    name: "Pulau Intan",
-    lat: 2.40277778, lng: 101.85361111,
-    info: "A popular spot for birdwatching, hiking, and running. The trail is open year-round and offers beautiful coastal scenery. Great for families and solo explorers alike.",
+    icon: "https://i.postimg.cc/63KNSk4T/8-removebg-preview.png" },
+  { name: "Pulau Intan", lat: 2.40277778, lng: 101.85361111, category: "trail",
+    info: "Popular for birdwatching, hiking, and running. The trail is open year-round with beautiful coastal scenery — great for families and solo explorers.",
     img: "https://imgproxy.geocaching.com/f1a4ea3adede0b477f44b875051c75a4476d6c20?url=http%3A%2F%2Fgeocaching.nouveaustere.com%2FGC7C74Y%2Ftanjung_tuan_pulau_intan_south_01.jpg",
-    icon: "https://i.postimg.cc/020KBv6K/7-removebg-preview.png",
-    category: "trail"
-  }
+    icon: "https://i.postimg.cc/020KBv6K/7-removebg-preview.png" }
 ];
 
-// ── ICON-ONLY MARKERS DATA ───────────────────────────────────────────
 var iconOnly = [
   { lat: 2.41222222, lng: 101.85111111, icon: "https://i.postimg.cc/sXQwFvzf/Camp-removebg-preview.png", category: "camp" },
   { lat: 2.40416667, lng: 101.85305556, icon: "https://i.postimg.cc/sXQwFvzf/Camp-removebg-preview.png", category: "camp" },
@@ -169,53 +120,31 @@ var iconOnly = [
   { lat: 2.40361111, lng: 101.85388889, icon: "https://i.postimg.cc/vTD12VwX/Mangrove-removebg-preview.png", category: "wildlife" }
 ];
 
-
-// ── TRAIL PATH ───────────────────────────────────────────────────────
-// Hiking route connecting main landmarks in order
-var trailCoords = [
-  [2.40277778, 101.85361111], // Pulau Intan (start)
-  [2.40416667, 101.85305556], // Campsite south
-  [2.40577556, 101.85138889], // Cave
-  [2.406533,   101.855678  ], // Perigi Belanda
-  [2.406867,   101.855500  ], // Tapak Kaki Hang Tuah
-  [2.407222,   101.851744  ], // Lighthouse
-  [2.408056,   101.853889  ], // Perigi Keramat
-  [2.40944444, 101.85111111], // Hiker marker
-  [2.411133,   101.849444  ], // Bukit Batu Putih
-  [2.41222222, 101.85111111], // Campsite north
-  [2.41307778, 101.85098889]  // Monkey Bay (end)
-];
-
-var trailLayer = L.polyline(trailCoords, {
-  color: '#2a9d5c',
-  weight: 3,
-  opacity: 0.75,
-  dashArray: '8, 6'
-}).addTo(map);
-
-
 // ── PLACE MARKERS ────────────────────────────────────────────────────
-var allMarkers = []; // { marker, category, type }
+var allMarkers = [];
 
 landmarks.forEach(function(lm) {
-  var icon = new CustomIcon({ iconUrl: lm.icon });
-  var marker = L.marker([lm.lat, lm.lng], { icon: icon });
+  var marker = L.marker([lm.lat, lm.lng], { icon: makeLandmarkIcon(lm.icon) });
 
-  marker.on('click', function() {
-    openSidebar(lm.name, lm.img, lm.info);
-  });
+  var popupContent =
+    '<div class="tt-popup">' +
+      '<img src="' + lm.img + '" class="tt-popup-img" onerror="this.style.display=\'none\'">' +
+      '<div class="tt-popup-body">' +
+        '<h3 class="tt-popup-title">' + lm.name + '</h3>' +
+        '<p class="tt-popup-info">' + lm.info + '</p>' +
+      '</div>' +
+    '</div>';
 
+  marker.bindPopup(popupContent, { maxWidth: 260, className: 'tt-popup-wrap' });
   marker.addTo(map);
-  allMarkers.push({ marker: marker, category: lm.category, type: 'landmark' });
+  allMarkers.push({ marker: marker, category: lm.category, iconUrl: lm.icon, isLandmark: true });
 });
 
 iconOnly.forEach(function(m) {
-  var icon = new SmallIcon({ iconUrl: m.icon });
-  var marker = L.marker([m.lat, m.lng], { icon: icon });
+  var marker = L.marker([m.lat, m.lng], { icon: makeSmallIcon(m.icon) });
   marker.addTo(map);
-  allMarkers.push({ marker: marker, category: m.category, type: 'icon' });
+  allMarkers.push({ marker: marker, category: m.category, iconUrl: m.icon, isLandmark: false });
 });
-
 
 // ── AUTO FIT BOUNDS ──────────────────────────────────────────────────
 var bounds = L.latLngBounds();
@@ -223,54 +152,30 @@ landmarks.forEach(function(lm) { bounds.extend([lm.lat, lm.lng]); });
 iconOnly.forEach(function(m)  { bounds.extend([m.lat, m.lng]); });
 map.fitBounds(bounds, { padding: [60, 60] });
 
-
-// ── SIDEBAR ──────────────────────────────────────────────────────────
-function openSidebar(name, img, info) {
-  document.getElementById('sidebar-name').textContent = name;
-  document.getElementById('sidebar-img').src = img;
-  document.getElementById('sidebar-info').textContent = info;
-  document.getElementById('sidebar').classList.remove('sidebar-hidden');
-}
-
-function closeSidebar() {
-  document.getElementById('sidebar').classList.add('sidebar-hidden');
-}
-
-// Close sidebar when clicking the map
-map.on('click', function() { closeSidebar(); });
-
+// ── RESCALE ICONS ON ZOOM ────────────────────────────────────────────
+map.on('zoomend', function() {
+  allMarkers.forEach(function(item) {
+    var newIcon = item.isLandmark
+      ? makeLandmarkIcon(item.iconUrl)
+      : makeSmallIcon(item.iconUrl);
+    item.marker.setIcon(newIcon);
+  });
+});
 
 // ── LEGEND TOGGLE ────────────────────────────────────────────────────
 function toggleLegend() {
   document.getElementById('legend').classList.toggle('legend-hidden');
 }
 
-
 // ── FILTER MARKERS ───────────────────────────────────────────────────
 function filterMarkers(category, btn) {
-  // Update active button
-  document.querySelectorAll('.filter-btn').forEach(function(b) {
-    b.classList.remove('active');
-  });
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
-
-  // Show/hide markers
   allMarkers.forEach(function(item) {
     if (category === 'all' || item.category === category) {
-      if (!map.hasLayer(item.marker)) {
-        item.marker.addTo(map);
-      }
+      if (!map.hasLayer(item.marker)) item.marker.addTo(map);
     } else {
-      if (map.hasLayer(item.marker)) {
-        map.removeLayer(item.marker);
-      }
+      if (map.hasLayer(item.marker)) map.removeLayer(item.marker);
     }
   });
-
-  // Show/hide trail line
-  if (category === 'all' || category === 'trail') {
-    if (!map.hasLayer(trailLayer)) trailLayer.addTo(map);
-  } else {
-    if (map.hasLayer(trailLayer)) map.removeLayer(trailLayer);
-  }
 }
